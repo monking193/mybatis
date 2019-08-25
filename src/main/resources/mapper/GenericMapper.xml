@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mybatis.dao.GenericMapper">
+
+    <select id="queryDBEntity" parameterType="com.example.mybatis.entity.EntityInfo" resultType="java.util.HashMap">
+        select
+        <foreach collection="cols" item="eachCol" separator=",">
+            `${eachCol.dbColName}` as ${eachCol.entityColName}
+        </foreach>
+        from <if test="database!=null">${database}.</if>${tableName}
+        <where>
+            <foreach collection="cols" item="eachCol" separator="and">
+                <if test="eachCol.value!=null">
+                    ${eachCol.dbColName} = #{eachCol.value}
+                </if>
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="insertDBEntity" parameterType="com.example.mybatis.entity.EntityInfo" useGeneratedKeys="true" keyProperty="generatedKey">
+        insert into <if test="database!=null">${database}.</if>${tableName}
+        <foreach collection="cols" item="eachCol" separator="," open="(" close=")">
+            `${eachCol.dbColName}`
+        </foreach>
+        values
+        <foreach collection="cols" item="eachCol" separator="," open="(" close=")" >
+            <choose>
+                <when test="eachCol.value==null and  eachCol.insertIfNull!=null">
+                    ${eachCol.insertIfNull}
+                </when>
+                <otherwise>
+                    #{eachCol.value}
+                </otherwise>
+            </choose>
+        </foreach>
+    </insert>
+
+    <insert id="insertDBEntityBatch" parameterType="java.util.List">
+        <foreach collection="list" item="eachInfo" index="index" separator=",">
+            <if test=" index == 0 ">
+                insert into <if test="eachInfo.database!=null">${eachInfo.database}.</if>${eachInfo.tableName}
+                <foreach collection="eachInfo.cols" item="eachCol" separator="," open="(" close=")">
+                    `${eachCol.dbColName}`
+                </foreach>
+                values
+            </if>
+            <foreach collection="eachInfo.cols" item="eachColumn" separator="," open="(" close=")" >
+                <choose>
+                    <when test="eachColumn.value==null and  eachColumn.insertIfNull!=null">
+                        ${eachColumn.insertIfNull}
+                    </when>
+                    <otherwise>
+                        #{eachColumn.value}
+                    </otherwise>
+                </choose>
+            </foreach>
+        </foreach>
+    </insert>
+
+    <update id="updateDBEntityByKey" parameterType="com.example.mybatis.entity.EntityInfo">
+        update <if test="database!=null">${database}.</if>${tableName}
+        <set>
+            <foreach collection="cols" item="eachCol">
+                <if test="eachCol.value!=null and eachCol.isKeyColumn == false">
+                    ${eachCol.dbColName} = #{eachCol.value},
+                </if>
+                <if test="eachCol.value==null and eachCol.updateIfNull!=null and eachCol.isKeyColumn == false">
+                    ${eachCol.dbColName} = ${eachCol.updateIfNull},
+                </if>
+            </foreach>
+        </set>
+
+        <where>
+            <if test="keyCol.value==null">
+                1=0 and
+            </if>
+            ${keyCol.dbColName} = #{keyCol.value}
+        </where>
+    </update>
+    <delete id="deleteDBEntityByKey" parameterType="com.example.mybatis.entity.EntityInfo">
+        delete from <if test="database!=null">${database}.</if>${tableName}
+        <where>
+            <if test="keyCol.value==null">
+                1=0 and
+            </if>
+            ${keyCol.dbColName} = #{keyCol.value}
+        </where>
+    </delete>
+
+</mapper>
