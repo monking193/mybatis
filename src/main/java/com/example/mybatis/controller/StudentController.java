@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -29,6 +30,30 @@ public class StudentController {
     public void deleteById(long id){
         studentMapper.deleteById(id);
     }
+
+    @RequestMapping(value = "/getInsertId")
+    public String getInsertId(){
+        Student student = new Student();
+        student.setAddress("2343");
+        student.setMoney(66666666);
+        student.setName("djd");
+        student.setSto_no("18850542239");
+        student.setTel("18030040892");
+        int num = studentMapper.insertStudent(student);
+        System.out.print(num);
+        return String.valueOf(student.getId());
+    }
+
+    @RequestMapping(value = "/getMyData")
+    public HashMap<String,Object> getMyData(){
+        HashMap<String,String> param = new HashMap<>();
+        param.put("id","0000000001");
+        param.put("name","dsfdf");
+        HashMap<String,Object> data = studentMapper.getMyData(param);
+        return data;
+    }
+
+
 
     @RequestMapping("/insert")
     public void insert(){

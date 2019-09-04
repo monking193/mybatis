@@ -52,4 +52,16 @@ public class Student {
     public void setMoney(int money) {
         this.money = money;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", tel='" + tel + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", sto_no='" + sto_no + '\'' +
+                ", money=" + money +
+                '}';
+    }
 }

@@ -17,6 +17,10 @@
         SELECT * from student
     </select>
 
+    <select id="getMyData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        SELECT * from student where id = #{id} and name = #{name}
+    </select>
+
    <update id="updateStudentById" parameterType="com.example.mybatis.entity.Student">
         update student set name = #{name,jdbcType=VARCHAR},
                         tel = #{tel,jdbcType=VARCHAR},
@@ -24,9 +28,9 @@
                         where id = #{id}
     </update>
 
-    <insert id="insertStudent" parameterType="com.example.mybatis.entity.Student">
-        INSERT  into student(id,name,sto_no,tel,address)
-        VALUES (#{id},#{name,jdbcType=VARCHAR},#{sto_no,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR})
+    <insert id="insertStudent" parameterType="com.example.mybatis.entity.Student" keyProperty="id" useGeneratedKeys="true">
+        INSERT  into student(name,sto_no,tel,address)
+        VALUES (#{name,jdbcType=VARCHAR},#{sto_no,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR})
     </insert>
 
     <delete id="deleteById">
