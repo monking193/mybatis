@@ -1,13 +1,21 @@
 package com.example.mybatis.entity;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.*;
+
 public class Student {
 
+    @NotNull(message = "id不能为空")
     public int id;
 
     public String tel;
 
+    @NotEmpty(message = "姓名不能为空")
+    @Length(min = 6, max = 16, message = "The length of the password must be between 6 and 16 b")
     public String name;
 
+    @Email(message = "邮箱格式错误!")
     public String address;
 
     public String sto_no;

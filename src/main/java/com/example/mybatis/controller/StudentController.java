@@ -4,18 +4,22 @@ import com.example.mybatis.dao.GenericMapper;
 import com.example.mybatis.dao.StudentMapper;
 import com.example.mybatis.entity.Student;
 import com.example.mybatis.entity.StudentEntity;
+import com.example.mybatis.exception.StudentException;
 import com.example.mybatis.service.GenericDaoImpl;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 
 @RestController
 public class StudentController {
+
     @Autowired
     private StudentMapper studentMapper;
     @Autowired
@@ -40,7 +44,6 @@ public class StudentController {
         student.setSto_no("18850542239");
         student.setTel("18030040892");
         int num = studentMapper.insertStudent(student);
-        System.out.print(num);
         return String.valueOf(student.getId());
     }
 
@@ -75,11 +78,34 @@ public class StudentController {
     }
 
 
-    @RequestMapping(value = "/getPage",method = RequestMethod.GET)
+    @RequestMapping(value = "/getPage",method = RequestMethod.GET,produces = "application/json")
     public List<Student> getPageList(int pageSize,int pageNum){
         PageHelper.startPage(pageNum,pageSize);
         List <Student> page = studentMapper.getAll();
         return page;
     }
+
+    @PostMapping(value = "/getMyStudent",produces="application/json")
+    @ResponseBody
+    public String getStudent (@Validated @RequestBody Student student,BindingResult result) {
+        try{
+            if (result != null && result.hasErrors()) {
+                StringBuilder errorMessageBuilder = new StringBuilder();
+                result.getAllErrors().forEach(error -> errorMessageBuilder.append("[").append(error.getObjectName())
+                        .append("-").append(error.getDefaultMessage()).append("]"));
+
+                return errorMessageBuilder.toString();
+            }
+            return student.toString();
+        } catch (Exception e) {
+             if (e.getClass().equals(HttpMediaTypeNotSupportedException.class)) {
+                 System.out.print(new StudentException("00","不支持的格式类型"));
+             } else if (e.getClass().equals(HttpRequestMethodNotSupportedException.class)){
+                 System.out.print(new StudentException("01","不支持的请求方法"));
+             }
+        }
+        return null;
+    }
+
 
 }

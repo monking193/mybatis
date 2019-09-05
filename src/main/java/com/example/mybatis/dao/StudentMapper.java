@@ -23,4 +23,5 @@ public interface StudentMapper {
     public List<Student> getAll();
 
     public HashMap<String,Object> getMyData(HashMap<String,String> param);
+
 }
