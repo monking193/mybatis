@@ -1,8 +1,4 @@
-package com.example.mybatis.thread.threadPool;
-
-import com.example.mybatis.thread.futureTask.ThreadTest1;
-import com.example.mybatis.thread.futureTask.ThreadTest2;
-import com.example.mybatis.thread.futureTask.ThreadTest3;
+package com.example.mybatis.thread.futureTask;
 
 import java.util.concurrent.*;
 
