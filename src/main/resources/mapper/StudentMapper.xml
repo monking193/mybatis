@@ -28,6 +28,24 @@
                         where id = #{id}
     </update>
 
+    <insert id="batchInsert" parameterType="com.example.mybatis.entity.Student">
+        INSERT  into student(name,sto_no,tel,address) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name,jdbcType=VARCHAR},#{item.sto_no,jdbcType=VARCHAR},#{item.tel,jdbcType=VARCHAR},#{item.address,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <insert id="procedureInsert" parameterType="com.example.mybatis.entity.Student">
+        DECLARE
+        begin
+            INSERT  into student(name,sto_no,tel,address) VALUES
+            <foreach collection="list" item="item" separator=",">
+                (#{item.name,jdbcType=VARCHAR},#{item.sto_no,jdbcType=VARCHAR},#{item.tel,jdbcType=VARCHAR},#{item.address,jdbcType=VARCHAR})
+            </foreach>
+        END
+    </insert>
+
+
     <insert id="insertStudent" parameterType="com.example.mybatis.entity.Student" keyProperty="id" useGeneratedKeys="true">
         INSERT  into student(name,sto_no,tel,address)
         VALUES (#{name,jdbcType=VARCHAR},#{sto_no,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR})

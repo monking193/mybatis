@@ -24,4 +24,8 @@ public interface StudentMapper {
 
     public HashMap<String,Object> getMyData(HashMap<String,String> param);
 
+    public void batchInsert(List<Student> students);
+
+    public void procedureInsert(List<Student> students);
+
 }
