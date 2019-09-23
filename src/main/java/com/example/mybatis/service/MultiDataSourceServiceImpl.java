@@ -6,6 +6,8 @@ import com.example.mybatis.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class MultiDataSourceServiceImpl {
 
@@ -21,5 +23,9 @@ public class MultiDataSourceServiceImpl {
 
     public Student getDataSouce1(long id) {
         return student1Mapper.getStudentById1(id);
+    }
+
+    public void testDelete(ArrayList<String> ids) {
+        studentMapper.batchDelete(ids);
     }
 }

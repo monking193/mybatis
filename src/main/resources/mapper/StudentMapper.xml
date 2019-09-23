@@ -54,4 +54,12 @@
     <delete id="deleteById">
         delete from student where id = #{id}
     </delete>
+
+    <delete id="batchDelete" parameterType="java.util.ArrayList">
+        DELETE  from student where id in
+        <foreach collection="list" separator="," open="(" close=")" item="item" index="index">
+            #{item}
+        </foreach>
+    </delete>
+
 </mapper>

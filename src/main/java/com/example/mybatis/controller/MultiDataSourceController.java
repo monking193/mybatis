@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
 @RestController
 public class MultiDataSourceController {
 
@@ -21,6 +23,15 @@ public class MultiDataSourceController {
 
         Student student1 = multiDataSourceService.getDataSouce1(1);
         System.out.print(student1);
+    }
+
+    @RequestMapping(value = "/batchDelete",method = RequestMethod.GET)
+    public void batchDelete() {
+        ArrayList<String> ids = new ArrayList<>();
+        for (int i = 0;i < 3000;i++) {
+            ids.add(String.valueOf(i));
+        }
+        multiDataSourceService.testDelete(ids);
     }
 
 }

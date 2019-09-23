@@ -28,4 +28,6 @@ public interface StudentMapper {
 
     public void procedureInsert(List<Student> students);
 
+    public void batchDelete(List<String> ids);
+
 }
